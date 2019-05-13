@@ -1,9 +1,10 @@
-#define XTEST_FILE_PATH
+#define XTEST_OUTPUT_FILE_FULL_PATH true
+#define XTEST_OUTPUT_LINE_CODE true
 
 #include "XTest.hpp"
 
 int func(){
-    return 1;
+    return 2;
 }
 
 TEST(simple){
