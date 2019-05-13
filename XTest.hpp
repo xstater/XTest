@@ -30,6 +30,10 @@
 #define XTEST_OUTPUT_LINE_CODE false
 #endif
 
+#if !defined(XTEST_OUTPUT_TEST_NAME)
+#define XTEST_OUTPUT_TEST_NAME true
+#endif
+
 //--------Debug Output----------
 
 //------Unit Test and Assert----
@@ -47,12 +51,16 @@ namespace xtest{
 
     class AssertInfo{
     public:
-        AssertInfo(AssertType type,const char *file,unsigned int line)
+        AssertInfo(AssertType type,const char *name,const char *file,unsigned int line)
                 :m_type(type),
+                 m_test_name(name),
                  m_file_full_path(file),
                  m_line(line){}
         ~AssertInfo() = default;
 
+        std::string getTestName()const{
+            return m_test_name;
+        }
         std::string getFileFullPath()const{
             return m_file_full_path;
         }
@@ -68,32 +76,34 @@ namespace xtest{
         }
         std::string getLineCode()const{
             std::ifstream ifile(m_file_full_path);
-            if(!ifile)
+            if(!ifile.is_open())
                 return "##Cannot open the source file##";
-            char ch = ' ';
+            std::string source_code;
+            ifile.seekg(0,std::ios_base::end);
+            auto size = ifile.tellg();
+            ifile.seekg(0,std::ios_base::beg);
+            source_code.resize(size);
+            ifile.read(&source_code[0],size);
             unsigned int lineCount = 1;
-            for(;!ifile.eof() && lineCount < m_line;ifile >> ch){
-                if(ch == '\n')
+            auto itr = source_code.begin();
+            //find that line
+            for(;itr != source_code.end() && lineCount < m_line;++itr){
+                if(*itr == '\n'){
                     ++lineCount;
+                }
             }
-            for(;ch == ' ' || ch == '\t';ifile >> ch);
-            std::string code;
-            for(;!ifile.eof() && ch != '\n';ifile >> ch){
-                code.push_back(ch);
-            }
-            return code;
+            //remove suffix space or table
+            for(;*itr == '\t' || *itr == ' '; ++itr);
+            //find the end line char
+            auto itr_end = itr;
+            for(;*itr_end != '\n' && itr_end != source_code.end(); ++itr_end);
+            return std::string(itr,itr_end);
         }
         unsigned int getLine()const{
             return m_line;
         }
-    protected:
-    private:
-        AssertType m_type;
-        std::string m_file_full_path;
-        unsigned int m_line;
-
-        std::string to_string(AssertType type){
-            switch(type){
+        std::string to_string()const{
+            switch(m_type){
                 case AssertType::equal:
                     return "==";
                 case AssertType::not_equal:
@@ -106,8 +116,17 @@ namespace xtest{
                     return "<=";
                 case AssertType::greater_equal:
                     return ">=";
+                default:
+                    return "NON";
             }
         }
+    protected:
+    private:
+        AssertType m_type;
+        std::string m_test_name;
+        std::string m_file_full_path;
+        unsigned int m_line;
+
     };
 
     template<class ValueType,class ExptValueType>
@@ -118,6 +137,10 @@ namespace xtest{
                     ExptValueType &&expt_value){
             std::stringstream ss;
             ss << "Assert{\n";
+
+            #if XTEST_OUTPUT_TEST_NAME
+            ss << "\tTest name:" << info.getTestName() << '\n';
+            #endif
 
             #if XTEST_OUTPUT_FILE_NAME
                 ss << "\tFile name:" << info.getFileName() << '\n';
@@ -137,7 +160,7 @@ namespace xtest{
                 ss << "\tCode:" << info.getLineCode() << '\n';
             #endif
 
-            ss << "} => expect " << expt_value << " but " << value << '\n';
+            ss << "} => expect \'value" << info.to_string() << expt_value << "\' but value="  << value;
 
             m_msg = ss.str();
         }
@@ -166,7 +189,31 @@ int main(){ \
 #define ASSERT_EQ(value,expt_value) \
 if(!(value == expt_value)) \
     throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
-            {xtest::AssertType::equal,__FILE__,__LINE__}, \
+            {xtest::AssertType::equal,__func__,__FILE__,__LINE__}, \
+            value, \
+            expt_value);
+#define ASSERT_NEQ(value,expt_value) \
+if(!(value != expt_value)) \
+    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
+            {xtest::AssertType::not_equal,__func__,__FILE__,__LINE__}, \
+            value, \
+            expt_value);
+#define ASSERT_LE(value,expt_value) \
+if(!(value < expt_value)) \
+    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
+            {xtest::AssertType::less,__func__,__FILE__,__LINE__}, \
+            value, \
+            expt_value);
+#define ASSERT_LEQ(value,expt_value) \
+if(!(value <= expt_value)) \
+    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
+            {xtest::AssertType::less_equal,__func__,__FILE__,__LINE__}, \
+            value, \
+            expt_value);
+#define ASSERT_GEQ(value,expt_value) \
+if(!(value >= expt_value)) \
+    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
+            {xtest::AssertType::greater_equal,__func__,__FILE__,__LINE__}, \
             value, \
             expt_value);
 

@@ -8,7 +8,10 @@ int func(){
 }
 
 TEST(simple){
-    ASSERT_EQ(func(),0);//fail
+    ASSERT_GEQ(func(),0);//pass
+}
+TEST(simple2){
+    ASSERT_LE(func(),0);//fail
 }
 
-RUN_TEST(simple)
+RUN_TEST(simple,simple2)
