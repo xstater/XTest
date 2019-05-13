@@ -1,9 +1,10 @@
+///some configurations
 #define XTEST_OUTPUT_FILE_FULL_PATH true
-#define XTEST_OUTPUT_LINE_CODE true
 
 #include "XTest.hpp"
 
 int func(){
+    println("Func",1); //debug print
     return 2;
 }
 

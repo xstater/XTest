@@ -27,7 +27,7 @@
 #endif
 
 #if !defined(XTEST_OUTPUT_LINE_CODE)
-#define XTEST_OUTPUT_LINE_CODE false
+#define XTEST_OUTPUT_LINE_CODE true
 #endif
 
 #if !defined(XTEST_OUTPUT_TEST_NAME)
@@ -35,19 +35,26 @@
 #endif
 
 //--------Debug Output----------
-template <class Type,class...ArgsType>
-void print(Type &&arg,ArgsType&&...args){
-    std::cout << arg;
-    print(std::forward<Type>(args)...);
+template <class ArgType>
+void print(ArgType &&arg){
+    std::cout << std::forward<ArgType>(arg);
 }
-template <class Type>
-void print(Type &&arg){
-    std::cout << arg;
+template <class ArgType,class...ArgsType>
+void print(ArgType &&arg,ArgsType&&...args){
+    std::cout << std::forward<ArgType>(arg);
+    print(std::forward<ArgsType>(args)...);
 }
 
-void println(){
-    std::cout << std::endl;
+template <class ArgType>
+void println(ArgType &&arg){
+    std::cout << std::forward<ArgType>(arg) << std::endl;
 }
+template <class ArgType,class...ArgsType>
+void println(ArgType &&arg,ArgsType&&...args){
+    std::cout << std::forward<ArgType>(arg);
+    println(std::forward<ArgsType>(args)...);
+}
+
 
 //------Unit Test and Assert----
 
