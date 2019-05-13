@@ -1,3 +1,5 @@
+#define XTEST_FILE_PATH
+
 #include "XTest.hpp"
 
 int func(){
