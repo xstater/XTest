@@ -35,6 +35,19 @@
 #endif
 
 //--------Debug Output----------
+template <class Type,class...ArgsType>
+void print(Type &&arg,ArgsType&&...args){
+    std::cout << arg;
+    print(std::forward<Type>(args)...);
+}
+template <class Type>
+void print(Type &&arg){
+    std::cout << arg;
+}
+
+void println(){
+    std::cout << std::endl;
+}
 
 //------Unit Test and Assert----
 
