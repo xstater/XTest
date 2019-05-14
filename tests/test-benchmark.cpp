@@ -4,8 +4,11 @@
 
 BENCHMARK(test1,{
     int k = 1;
+    int *p = nullptr;
     for(int i = 1;i < 10000;++i){
         ++k;
+        p = new int(2);
+        delete p;
     }
 })
 

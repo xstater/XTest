@@ -1,19 +1,19 @@
 #ifndef _XTEST_BENCHMARK_H_
 #define _XTEST_BENCHMARK_H_
 
-#include <chrono>
-#include <iostream>
-
 ///------Configurations-------
 #if !defined(XTEST_BENCHMARK_TIME)
 #define XTEST_BENCHMARK_TIME true
 #endif
 
-#if !defined(XTEST_BENCHMARK_SPACE)
-#define XTEST_BENCHMARK_SPACE false
+#if !defined(XTEST_BENCHMARK_HEAP)
+#define XTEST_BENCHMARK_HEAP true
 #endif
 
 ///------Benchmark------------
+
+#include <chrono>
+#include <iostream>
 
 namespace xtest{
     ///choose a suitable unit and print
