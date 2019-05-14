@@ -15,4 +15,4 @@ TEST(simple2){
     ASSERT_LE(func(),0);//fail
 }
 
-RUN_TEST(simple,simple2)
+RUN(simple,simple2)

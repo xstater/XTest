@@ -170,16 +170,6 @@ namespace xtest{
 
 #define TEST(name) void name()
 
-#define RUN_TEST(...) \
-int main(){ \
-    try{ \
-        __VA_ARGS__(); \
-    }catch(std::exception &e){ \
-        std::cout<<e.what()<<std::endl; \
-    } \
-    return 0; \
-}
-
 
 #define ASSERT_EQ(value,expt_value) \
 if(!(value == expt_value)) \
