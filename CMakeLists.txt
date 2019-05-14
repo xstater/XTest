@@ -4,4 +4,6 @@ include_directories(./)
 
 set(Files ./XTest.hpp Test.h Print.h)
 
-add_executable(test ./test.cpp ${Files})
+add_executable(test-assert tests/test-assert.cpp ${Files})
+
+add_executable(test-benchmark tests/test-benchmark.cpp ${Files})
