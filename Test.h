@@ -170,36 +170,106 @@ namespace xtest{
 
 #define TEST(name) void name()
 
+namespace xtest{
+    template<class Value,class ExptValue>
+    void assert_eq(const char *name,const char *file,unsigned int line,Value &&val,ExptValue &&exptval){
+        if(!(val == exptval)){
+            throw AssertFail<Value,ExptValue>(
+                    {
+                        AssertType::equal,
+                        name,
+                        file,
+                        line
+                    },
+                    std::forward<Value>(val),
+                    std::forward<ExptValue>(exptval)
+                    );
+        }
+    }
+    template<class Value,class ExptValue>
+    void assert_neq(const char *name,const char *file,unsigned int line,Value &&val,ExptValue &&exptval){
+        if(!(val != exptval)){
+            throw AssertFail<Value,ExptValue>(
+                    {
+                            AssertType::not_equal,
+                            name,
+                            file,
+                            line
+                    },
+                    std::forward<Value>(val),
+                    std::forward<ExptValue>(exptval)
+            );
+        }
+    }
+    template<class Value,class ExptValue>
+    void assert_le(const char *name,const char *file,unsigned int line,Value &&val,ExptValue &&exptval){
+        if(!(val < exptval)){
+            throw AssertFail<Value,ExptValue>(
+                    {
+                            AssertType::less,
+                            name,
+                            file,
+                            line
+                    },
+                    std::forward<Value>(val),
+                    std::forward<ExptValue>(exptval)
+            );
+        }
+    }
+    template<class Value,class ExptValue>
+    void assert_ge(const char *name,const char *file,unsigned int line,Value &&val,ExptValue &&exptval){
+        if(!(val > exptval)){
+            throw AssertFail<Value,ExptValue>(
+                    {
+                            AssertType::greater,
+                            name,
+                            file,
+                            line
+                    },
+                    std::forward<Value>(val),
+                    std::forward<ExptValue>(exptval)
+            );
+        }
+    }
+    template<class Value,class ExptValue>
+    void assert_leq(const char *name,const char *file,unsigned int line,Value &&val,ExptValue &&exptval){
+        if(!(val <= exptval)){
+            throw AssertFail<Value,ExptValue>(
+                    {
+                            AssertType::less_equal,
+                            name,
+                            file,
+                            line
+                    },
+                    std::forward<Value>(val),
+                    std::forward<ExptValue>(exptval)
+            );
+        }
+    }
+    template<class Value,class ExptValue>
+    void assert_geq(const char *name,const char *file,unsigned int line,Value &&val,ExptValue &&exptval){
+        if(!(val >= exptval)){
+            throw AssertFail<Value,ExptValue>(
+                    {
+                            AssertType::greater_equal,
+                            name,
+                            file,
+                            line
+                    },
+                    std::forward<Value>(val),
+                    std::forward<ExptValue>(exptval)
+            );
+        }
+    }
+}
 
-#define ASSERT_EQ(value,expt_value) \
-if(!(value == expt_value)) \
-    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
-            {xtest::AssertType::equal,__func__,__FILE__,__LINE__}, \
-            value, \
-            expt_value);
-#define ASSERT_NEQ(value,expt_value) \
-if(!(value != expt_value)) \
-    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
-            {xtest::AssertType::not_equal,__func__,__FILE__,__LINE__}, \
-            value, \
-            expt_value);
-#define ASSERT_LE(value,expt_value) \
-if(!(value < expt_value)) \
-    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
-            {xtest::AssertType::less,__func__,__FILE__,__LINE__}, \
-            value, \
-            expt_value);
-#define ASSERT_LEQ(value,expt_value) \
-if(!(value <= expt_value)) \
-    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
-            {xtest::AssertType::less_equal,__func__,__FILE__,__LINE__}, \
-            value, \
-            expt_value);
-#define ASSERT_GEQ(value,expt_value) \
-if(!(value >= expt_value)) \
-    throw xtest::AssertFail<decltype(value),decltype(expt_value)>( \
-            {xtest::AssertType::greater_equal,__func__,__FILE__,__LINE__}, \
-            value, \
-            expt_value);
+#define ASSERT_EQ(value,expt_value) xtest::assert_eq(__func__,__FILE__,__LINE__,value,expt_value)
+#define ASSERT_NEQ(value,expt_value) xtest::assert_neq(__func__,__FILE__,__LINE__,value,expt_value)
+#define ASSERT_LE(value,expt_value) xtest::assert_le(__func__,__FILE__,__LINE__,value,expt_value)
+#define ASSERT_GE(value,expt_value) xtest::assert_ge(__func__,__FILE__,__LINE__,value,expt_value)
+#define ASSERT_LEQ(value,expt_value) xtest::assert_leq(__func__,__FILE__,__LINE__,value,expt_value)
+#define ASSERT_GEQ(value,expt_value) xtest::assert_geq(__func__,__FILE__,__LINE__,value,expt_value)
+
+
 
 #endif

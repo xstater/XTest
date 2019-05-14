@@ -10,6 +10,9 @@ int func(){
 
 TEST(simple){
     ASSERT_GEQ(func(),0);//pass
+
+
+    ASSERT_LE(func(),0);//fail
 }
 TEST(simple2){
     ASSERT_LE(func(),0);//fail
