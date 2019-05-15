@@ -6,14 +6,15 @@
 #define XTEST_BENCHMARK_TIME true
 #endif
 
-#if !defined(XTEST_BENCHMARK_HEAP)
-#define XTEST_BENCHMARK_HEAP true
+#if !defined(XTEST_BENCHMARK_MEMORY)
+#define XTEST_BENCHMARK_MEMORY false
 #endif
 
 ///------Benchmark------------
 
 #include <chrono>
 #include <iostream>
+#include "XUnit/Unit.hpp"
 
 namespace xtest{
     ///choose a suitable unit and print
@@ -54,17 +55,40 @@ namespace xtest{
             print_time(diff);
         #endif
     }
+    void print_size(const unit::Byte &bytes){
+        std::cout << '[';
+
+        if(bytes > unit::GB(1)){
+            std::cout << unit::unit_cast<unit::GB>(bytes).value() << "GB";
+        }else if(bytes > unit::MB(1)){
+            std::cout << unit::unit_cast<unit::MB>(bytes).value() << "MB";
+        }else if(bytes > unit::KB(1)){
+            std::cout << unit::unit_cast<unit::KB>(bytes).value() << "KB";
+        }else{
+            std::cout << bytes.value() << "B";
+        }
+
+        std::cout << ']';
+    }
+    void __print_size(const unit::Byte &bytes){
+#if XTEST_BENCHMARK_MEMORY
+        print_size(bytes);
+#endif
+    }
 }
 
 
 
-#define BENCHMARK(name,code) \
-void name(){ \
+#define BENCHMARK_BEGIN(name) \
+void name() { \
     std::cout << "Benchmark:" << __func__ << "..."; \
-    auto start = std::chrono::steady_clock::now(); \
-    code \
-    auto end = std::chrono::steady_clock::now(); \
-    xtest::__print_time(end - start); \
+    xtest::Allocator::instance().reset();\
+    auto __start__ = std::chrono::steady_clock::now();
+
+#define BENCHMARK_END \
+    auto __end__ = std::chrono::steady_clock::now(); \
+    xtest::print_time(__end__ - __start__); \
+    xtest::print_size(xtest::Allocator::instance().getMaxSize()); \
     std::cout << std::endl; \
 }
 

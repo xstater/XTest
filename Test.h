@@ -168,7 +168,14 @@ namespace xtest{
     };
 }
 
-#define TEST(name) void name()
+#define TEST_BEGIN(name) \
+void name(){ \
+    std::cout << "Test case:" << __func__ << "...";
+
+#define TEST_END \
+    std::cout << "PASS" << std::endl; \
+}
+
 
 namespace xtest{
     template<class Value,class ExptValue>

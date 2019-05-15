@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.01)
 
 include_directories(./)
 
-set(Files ./XTest.hpp Test.h Print.h Run.h Benchmark.h)
+set(Files ./XTest.hpp Test.h Print.h Run.h Benchmark.h Allocator.h)
 
 add_executable(test-assert tests/test-assert.cpp ${Files})
 
