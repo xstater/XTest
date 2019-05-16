@@ -71,6 +71,11 @@ namespace xtest{
         };
         using is_always_equal = std::true_type;
 
+        TrackAllocator() noexcept{}
+        constexpr TrackAllocator(const TrackAllocator &) noexcept{}
+        template <class U>
+        constexpr TrackAllocator(const TrackAllocator<U> &) noexcept{}
+
         Type *allocate(size_t n){
             return static_cast<Type*>(Allocator::instance().allocate(sizeof(Type) * n));
         }
