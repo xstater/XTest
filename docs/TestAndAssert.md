@@ -50,6 +50,42 @@ RUN(fib)
 #include <XTest.h>
 ```
 
+### 完整例子
+```
+///some configurations
+#define XTEST_OUTPUT_FILE_FULL_PATH true
+#define XTEST_OUTPUT_FILE_PATH true
+
+#include "XTest.h"
+
+int func(){
+    //println("Func",1); //debug print
+    return 2;
+}
+
+TEST_BEGIN(simple1)
+    ASSERT_GEQ(func(),0);//pass
+    //ASSERT_LE(func(),0);//fail
+TEST_END
+TEST_BEGIN(simple2)
+    ASSERT_LE(func(),0);//fail
+TEST_END
+
+RUN(simple1,simple2)
+```
+输出
+```
+Test case:simple1...PASS
+Test case:simple2...Assert{
+        Test name:simple2
+        File name:test-assert.cpp
+        File path:D:\git\XTest\tests\
+        File full path:D:\git\XTest\tests\test-assert.cpp
+        Line:17
+        Code:ASSERT_LE(func(),0);//fail
+} => expect 'value<0' but value=2
+```
+
 
 #### links
 * [Readme.md](../README.md)
