@@ -1,13 +1,12 @@
 #define XTEST_BENCHMARK_MEMORY true
-#define XTEST_BENCHMARK_TRACK_STL true
 
-#include "XTest.hpp"
+#include "XTest.h"
 #include "Allocator.h"
 
 #include <vector>
 #include <stack>
 
-BENCHMARK_BEGIN(test1)
+BENCHMARK_BEGIN(test3)
     auto &allocator = xtest::Allocator::instance();
     xtest::vector<int> vec;//use vector<T> in namespace xtest to track memory
     vec.push_back(12);
@@ -29,4 +28,10 @@ BENCHMARK_BEGIN(test2)
     }
 BENCHMARK_END
 
-RUN(test1,test2)
+BENCHMARK_BEGIN(test1)
+    xtest::vector<int> vec;
+    for(int i = 1;i < 100000;++i)
+        vec.push_back(i);
+BENCHMARK_END
+
+RUN(test1,test2,test3)

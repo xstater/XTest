@@ -11,7 +11,11 @@
 #endif
 
 #if !defined(XTEST_BENCHMARK_TRACK_STL)
+#if XTEST_BENCHMARK_MEMORY
+#define XTEST_BENCHMARK_TRACK_STL true
+#else
 #define XTEST_BENCHMARK_TRACK_STL false
+#endif
 #endif
 
 ///------Benchmark------------
@@ -92,12 +96,10 @@ void name() { \
 
 #define BENCHMARK_END \
     auto __end__ = std::chrono::steady_clock::now(); \
-    xtest::print_time(__end__ - __start__); \
-    xtest::print_size(xtest::Allocator::instance().getMaxSize()); \
+    xtest::__print_time(__end__ - __start__); \
+    xtest::__print_size(xtest::Allocator::instance().getMaxSize()); \
     std::cout << std::endl; \
 }
-
-#if XTEST_BENCHMARK_TRACK_STL
 
 ///redeclare to avoid include too many STL header file
 
@@ -148,6 +150,8 @@ namespace std{
     class priority_queue;
 }
 
+#if XTEST_BENCHMARK_TRACK_STL
+
 namespace xtest{
     template <class Type>
     using vector = std::vector<Type,TrackAllocator<Type>>;
@@ -192,6 +196,56 @@ namespace xtest{
     using queue = std::queue<T,Container>;
 
     template <class T,class Container = deque<T>,class Compare = std::less<typename Container::value_type>>
+    using priority_queue = std::priority_queue<T,Container,Compare>;
+}
+
+#else
+
+///use std::allocator
+namespace xtest{
+    template <class Type,class Allocator = std::allocator<Type>>
+    using vector = std::vector<Type,Allocator>;
+
+    template <class Type,class Allocator = std::allocator<Type>>
+    using deque = std::deque<Type,Allocator>;
+
+    template <class Type,class Allocator = std::allocator<Type>>
+    using list = std::list<Type,Allocator>;
+
+    template <class Type,class Allocator = std::allocator<Type>>
+    using forward_list = std::forward_list<Type,Allocator>;
+
+    template <class Key,class Compare = std::less<Key>,class Allocator = std::allocator<Key>>
+    using set = std::set<Key,Compare,Allocator>;
+
+    template <class Key,class Compare = std::less<Key>,class Allocator = std::allocator<Key>>
+    using multiset = std::multiset<Key,Compare,Allocator>;
+
+    template <class Key,class T,class Compare = std::less<Key>,class Allocator = std::allocator<std::pair<const Key,T>>>
+    using map = std::map<Key,T,Compare,Allocator>;
+
+    template <class Key,class T,class Compare = std::less<Key>,class Allocator = std::allocator<std::pair<const Key,T>>>
+    using multimap = std::multimap<Key,T,Compare,Allocator>;
+
+    template <class Key,class Hash = std::hash<Key>,class KeyEqual = std::equal_to<Key>,class Allocator = std::allocator<Key>>
+    using unordered_set = std::unordered_set<Key,Hash,KeyEqual,Allocator>;
+
+    template <class Key,class Hash = std::hash<Key>,class KeyEqual = std::equal_to<Key>,class Allocator = std::allocator<Key>>
+    using unordered_multiset = std::unordered_multiset<Key,Hash,KeyEqual,Allocator>;
+
+    template <class Key,class T,class Hash = std::hash<Key>,class KeyEqual = std::equal_to<Key>,class Allocator = std::allocator<std::pair<const Key,T>>>
+    using unordered_map = std::unordered_map<Key,T,Hash,KeyEqual,Allocator>;
+
+    template <class Key,class T,class Hash = std::hash<Key>,class KeyEqual = std::equal_to<Key>,class Allocator = std::allocator<std::pair<const Key,T>>>
+    using unordered_multimap = std::unordered_multimap<Key,T,Hash,KeyEqual,Allocator>;
+
+    template <class T,class Container = std::deque<T,std::allocator<T>>>
+    using stack = std::stack<T,Container>;
+
+    template <class T,class Container = std::deque<T,std::allocator<T>>>
+    using queue = std::queue<T,Container>;
+
+    template <class T,class Container = std::deque<T,std::allocator<T>>,class Compare = std::less<typename Container::value_type>>
     using priority_queue = std::priority_queue<T,Container,Compare>;
 }
 

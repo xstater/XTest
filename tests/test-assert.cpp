@@ -1,7 +1,8 @@
 ///some configurations
 #define XTEST_OUTPUT_FILE_FULL_PATH true
+#define XTEST_OUTPUT_FILE_PATH true
 
-#include "XTest.hpp"
+#include "XTest.h"
 
 int func(){
     //println("Func",1); //debug print
