@@ -4,7 +4,7 @@
 #include "XTest.hpp"
 
 int func(){
-    println("Func",1); //debug print
+    //println("Func",1); //debug print
     return 2;
 }
 

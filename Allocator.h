@@ -37,7 +37,7 @@ namespace xtest{
             free(p);
         }
 
-        void reset(){
+        void reset()noexcept{
             m_max_size = 0.0;
         }
 

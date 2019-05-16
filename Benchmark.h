@@ -10,10 +10,15 @@
 #define XTEST_BENCHMARK_MEMORY false
 #endif
 
+#if !defined(XTEST_BENCHMARK_TRACK_STL)
+#define XTEST_BENCHMARK_TRACK_STL false
+#endif
+
 ///------Benchmark------------
 
 #include <chrono>
 #include <iostream>
+#include "Allocator.h"
 #include "XUnit/Unit.hpp"
 
 namespace xtest{
@@ -91,5 +96,105 @@ void name() { \
     xtest::print_size(xtest::Allocator::instance().getMaxSize()); \
     std::cout << std::endl; \
 }
+
+#if XTEST_BENCHMARK_TRACK_STL
+
+///redeclare to avoid include too many STL header file
+
+namespace std{
+    template <class T,class Allocator>
+    class vector;
+
+    template <class T,class Allocator>
+    class deque;
+
+    template <class T,class Allocator>
+    class forward_list;
+
+    template <class T,class Allocator>
+    class list;
+
+    template <class Key,class Compare,class Allocator>
+    class set;
+
+    template <class Key,class Compare,class Allocator>
+    class multiset;
+
+    template <class Key,class T,class Compare,class Allocator>
+    class map;
+
+    template <class Key,class T,class Compare,class Allocator>
+    class multimap;
+
+    template <class Key,class Hash,class KeyEqual,class Allocator>
+    class unordered_set;
+
+    template <class Key,class Hash,class KeyEqual,class Allocator>
+    class unordered_multiset;
+
+    template <class Key,class T,class Hash,class KeyEqual,class Allocator>
+    class unordered_map;
+
+    template <class Key,class T,class Hash,class KeyEqual,class Allocator>
+    class unordered_multimap;
+
+    template <class T,class Container>
+    class stack;
+
+    template <class T,class Container>
+    class queue;
+
+    template <class T,class Container,class Compare>
+    class priority_queue;
+}
+
+namespace xtest{
+    template <class Type>
+    using vector = std::vector<Type,TrackAllocator<Type>>;
+
+    template <class Type>
+    using deque = std::deque<Type,TrackAllocator<Type>>;
+
+    template <class Type>
+    using list = std::list<Type,TrackAllocator<Type>>;
+
+    template <class Type>
+    using forward_list = std::forward_list<Type,TrackAllocator<Type>>;
+
+    template <class Key,class Compare = std::less<Key>>
+    using set = std::set<Key,Compare,TrackAllocator<Key>>;
+
+    template <class Key,class Compare = std::less<Key>>
+    using multiset = std::multiset<Key,Compare,TrackAllocator<Key>>;
+
+    template <class Key,class T,class Compare = std::less<Key>>
+    using map = std::map<Key,T,Compare,TrackAllocator<std::pair<const Key,T>>>;
+
+    template <class Key,class T,class Compare = std::less<Key>>
+    using multimap = std::multimap<Key,T,Compare,TrackAllocator<std::pair<const Key,T>>>;
+
+    template <class Key,class Hash = std::hash<Key>,class KeyEqual = std::equal_to<Key>>
+    using unordered_set = std::unordered_set<Key,Hash,KeyEqual,TrackAllocator<Key>>;
+
+    template <class Key,class Hash = std::hash<Key>,class KeyEqual = std::equal_to<Key>>
+    using unordered_multiset = std::unordered_multiset<Key,Hash,KeyEqual,TrackAllocator<Key>>;
+
+    template <class Key,class T,class Hash = std::hash<Key>,class KeyEqual = std::equal_to<Key>>
+    using unordered_map = std::unordered_map<Key,T,Hash,KeyEqual,TrackAllocator<std::pair<const Key,T>>>;
+
+    template <class Key,class T,class Hash = std::hash<Key>,class KeyEqual = std::equal_to<Key>>
+    using unordered_multimap = std::unordered_multimap<Key,T,Hash,KeyEqual,TrackAllocator<std::pair<const Key,T>>>;
+
+    template <class T,class Container = deque<T>>
+    using stack = std::stack<T,Container>;
+
+    template <class T,class Container = deque<T>>
+    using queue = std::queue<T,Container>;
+
+    template <class T,class Container = deque<T>,class Compare = std::less<typename Container::value_type>>
+    using priority_queue = std::priority_queue<T,Container,Compare>;
+}
+
+#endif
 
 #endif//_XTEST_BENCHMARK_H_
