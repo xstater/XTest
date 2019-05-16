@@ -26,7 +26,7 @@ Benchmark:test1...[2.79976ms]
 ### 内存跟踪
 * 通过定义`XTEST_BENCHMARK_MEMORY`为`true`开启内存跟踪，默认关闭
 * 通过定义`XTEST_BENCHMARK_TRACK_STL`为`true`跟踪计算STL容器的内存消耗，开启内存跟踪自动开启，可定义为`false`关闭
-* 使用`xtest::Allocator::instance()`获得全局内存分配器的引用<>
+* 使用`xtest::Allocator::instance()`获得全局内存分配器的引用
 * **使用内存跟踪会导致计时功能不准确**
 ```
 #define XTEST_BENCHMARK_MEMORY true
