@@ -51,7 +51,7 @@ namespace xtest{
     private:
         unit::Byte m_size;
         unit::Byte m_max_size;
-        std::map<void *,std::size_t,std::less<void *>,std::allocator<std::pair<const void *, size_t>>> m_ptrs;
+        std::map<void *,std::size_t,std::less<void *>> m_ptrs;
     };
 
     template <class Type>

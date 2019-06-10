@@ -101,54 +101,17 @@ void name() { \
     std::cout << std::endl; \
 }
 
-///redeclare to avoid include too many STL header file
 
-namespace std{
-    template <class T,class Allocator>
-    class vector;
-
-    template <class T,class Allocator>
-    class deque;
-
-    template <class T,class Allocator>
-    class forward_list;
-
-    template <class T,class Allocator>
-    class list;
-
-    template <class Key,class Compare,class Allocator>
-    class set;
-
-    template <class Key,class Compare,class Allocator>
-    class multiset;
-
-    template <class Key,class T,class Compare,class Allocator>
-    class map;
-
-    template <class Key,class T,class Compare,class Allocator>
-    class multimap;
-
-    template <class Key,class Hash,class KeyEqual,class Allocator>
-    class unordered_set;
-
-    template <class Key,class Hash,class KeyEqual,class Allocator>
-    class unordered_multiset;
-
-    template <class Key,class T,class Hash,class KeyEqual,class Allocator>
-    class unordered_map;
-
-    template <class Key,class T,class Hash,class KeyEqual,class Allocator>
-    class unordered_multimap;
-
-    template <class T,class Container>
-    class stack;
-
-    template <class T,class Container>
-    class queue;
-
-    template <class T,class Container,class Compare>
-    class priority_queue;
-}
+#include <vector>
+#include <deque>
+#include <forward_list>
+#include <list>
+#include <set>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <stack>
+#include <queue>
 
 #if XTEST_BENCHMARK_TRACK_STL
 
