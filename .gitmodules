@@ -1,0 +1,3 @@
+[submodule "XUnit"]
+	path = XUnit
+	url = https://github.com/xstater/XUnit

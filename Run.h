@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <utility>
+#include <iostream>
 
 namespace xtest{
     template <class Function>
@@ -14,6 +15,7 @@ namespace xtest{
         function();
         call(std::forward<Functions>(functions)...);
     }
+
 }
 
 #define RUN(...) \
@@ -25,5 +27,7 @@ int main(int argc,char *argv[]){ \
     } \
     return 0; \
 }
+
+
 
 #endif
