@@ -17,7 +17,7 @@ namespace xtest{
 }
 
 #define RUN(...) \
-int main(){ \
+int main(int argc,char *argv[]){ \
     try{ \
         xtest::call(__VA_ARGS__); \
     }catch(std::exception &e){ \

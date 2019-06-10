@@ -166,11 +166,63 @@ namespace xtest{
     private:
         std::string m_msg;
     };
+
+    struct AssertPredFail : public std::exception{
+    public:
+        AssertPredFail( const AssertInfo &info){
+            std::stringstream ss;
+            ss << "Assert{\n";
+
+#if XTEST_OUTPUT_TEST_NAME
+            ss << "\tTest name:" << info.getTestName() << '\n';
+#endif
+
+#if XTEST_OUTPUT_FILE_NAME
+            ss << "\tFile name:" << info.getFileName() << '\n';
+#endif
+#if XTEST_OUTPUT_FILE_PATH
+            ss << "\tFile path:" << info.getFilePath() << '\n';
+#endif
+#if XTEST_OUTPUT_FILE_FULL_PATH
+            ss << "\tFile full path:" << info.getFileFullPath() << '\n';
+#endif
+
+#if XTEST_OUTPUT_LINE
+            ss << "\tLine:" << info.getLine() << '\n';
+#endif
+
+#if XTEST_OUTPUT_LINE_CODE
+            ss << "\tCode:" << info.getLineCode() << '\n';
+#endif
+            ss << '}';
+
+            m_msg = ss.str();
+        }
+        AssertPredFail() = default;
+        virtual const char *what()const noexcept{
+            return m_msg.c_str();
+        }
+    private:
+        std::string m_msg;
+    };
 }
 
 #define TEST(name) void name()
 
 namespace xtest{
+
+    void assert(const char *name,const char *file,unsigned int line,bool pred){
+        if(!pred){
+            throw AssertPredFail(
+                    {
+                            AssertType::equal,
+                            name,
+                            file,
+                            line
+                    }
+            );
+        }
+    }
     template<class Value,class ExptValue>
     void assert_eq(const char *name,const char *file,unsigned int line,Value &&val,ExptValue &&exptval){
         if(!(val == exptval)){
@@ -262,7 +314,7 @@ namespace xtest{
         }
     }
 }
-
+#define ASSERT(pred) xtest::assert(__func__,__FILE__,__LINE__,pred)
 #define ASSERT_EQ(value,expt_value) xtest::assert_eq(__func__,__FILE__,__LINE__,value,expt_value)
 #define ASSERT_NEQ(value,expt_value) xtest::assert_neq(__func__,__FILE__,__LINE__,value,expt_value)
 #define ASSERT_LE(value,expt_value) xtest::assert_le(__func__,__FILE__,__LINE__,value,expt_value)
