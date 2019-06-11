@@ -13,6 +13,9 @@ void print(ArgType &&arg,ArgsType&&...args){
     print(std::forward<ArgsType>(args)...);
 }
 
+void println(){
+    std::cout << std::endl;
+}
 template <class ArgType>
 void println(ArgType &&arg){
     std::cout << std::forward<ArgType>(arg) << std::endl;
