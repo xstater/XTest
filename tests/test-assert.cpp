@@ -1,20 +1,23 @@
-///some configurations
-#define XTEST_OUTPUT_FILE_FULL_PATH true
-#define XTEST_OUTPUT_FILE_PATH true
+#ifdef NDEBUG
+#define XTEST_ENABLE_ASSERT false
+#else
+#define XTEST_ENABLE_ASSERT true
+#endif
 
-#include "XTest.h"
+#include <iostream>
+#include "Assert.h"
+#include "Case.h"
+#include "Run.h"
 
-int func(){
-    //println("Func",1); //debug print
-    return 2;
-}
+using namespace std;
 
-TEST_BEGIN(simple1)
-    ASSERT_GEQ(func(),0);//pass
-    //ASSERT_LE(func(),0);//fail
-TEST_END
-TEST_BEGIN(simple2)
-    ASSERT_LE(func(),0);//fail
-TEST_END
+CASE_BEGIN(case1)
+    volatile int i = 0;
+    volatile int j = 0;
+    for(;i < 1000000; ++i){
+        ASSERT(i == j,"Strange Error");
+        ++j;
+    }
+CASE_END
 
-RUN(simple1,simple2)
+RUN(case1,REPEAT(case1,100))

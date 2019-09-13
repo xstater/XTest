@@ -1,9 +1,9 @@
 #ifndef _XTEST_RUN_H_
 #define _XTEST_RUN_H_
 
-#include <exception>
-#include <utility>
+#include <chrono>
 #include <iostream>
+#include "Utility.h"
 
 namespace xtest{
     template <class Function>
@@ -18,16 +18,23 @@ namespace xtest{
 
 }
 
-#define RUN(...) \
-int main(int argc,char *argv[]){ \
-    try{ \
-        xtest::call(__VA_ARGS__); \
-    }catch(std::exception &e){ \
-        std::cout<<e.what()<<std::endl; \
+#define REPEAT(func,count) \
+[]()->void{ \
+    std::cout << "Loop:" << std::endl; \
+    std::chrono::duration<double> total; \
+    for(unsigned int i = 0;i < count;++i){ \
+        total += func().time; \
     } \
-    return 0; \
+    std::cout << "Loop End: Total"; \
+    xtest::print_time(total); \
+    std::cout << ",Avg"; \
+    xtest::print_time(total / count); \
+    std::cout << ",Count " << count << std::endl; \
 }
 
+#define RUN(...) \
+int main(int argc,char *argv[]){ \
+    xtest::call(__VA_ARGS__); \
+}
 
-
-#endif
+#endif //_XTEST_RUN_H_

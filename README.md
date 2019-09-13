@@ -6,6 +6,7 @@
 * [Benchmark](./docs/Benchmark.md)
 
 ### Todo
+* 简化assert语法
 * 合并Benchmark和Testcase
 * 通过宏切换Benchmark和Testcase模式
 * 修改报错格式
