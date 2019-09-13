@@ -59,4 +59,8 @@ namespace xtest{
 #else
 #define ASSERT(pred,msg)
 #endif
+
+///some useful asserts
+#define ASSERT_NULL(ptr) ASSERT((ptr) != nullptr,#ptr " is a null pointer")
+
 #endif //_XTEST_ASSERT_H_
