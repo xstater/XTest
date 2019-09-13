@@ -22,14 +22,18 @@ namespace xtest{
 []()->void{ \
     std::cout << "Loop:" << std::endl; \
     std::chrono::duration<double> total; \
+    unsigned int passed_cnt = 0; \
     for(unsigned int i = 0;i < count;++i){ \
-        total += func().time; \
+        auto result = func(); \
+        total += result.time; \
+        if(result.pass) \
+            ++passed_cnt; \
     } \
     std::cout << "Loop End: Total"; \
     xtest::print_time(total); \
     std::cout << ",Avg"; \
     xtest::print_time(total / count); \
-    std::cout << ",Count " << count << std::endl; \
+    std::cout << ", " << passed_cnt << " passed in " << count << std::endl; \
 }
 
 #define RUN(...) \
