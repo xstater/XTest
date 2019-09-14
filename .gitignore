@@ -1,6 +1,7 @@
 .vscode
 build
 cmake-build-debug
+cmake-build-release
 .idea
 CMakeFiles
 .c4droid
