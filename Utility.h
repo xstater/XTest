@@ -11,6 +11,7 @@ namespace xtest{
         using seconds = std::chrono::duration<double,std::ratio<1>>;
         using milliseconds = std::chrono::duration<double,std::milli>;
         using microseconds = std::chrono::duration<double,std::micro>;
+        using nanoseconds = std::chrono::duration<double,std::nano>;
 
         std::cout << '[';
 
@@ -34,6 +35,10 @@ namespace xtest{
             std::cout
                     << microseconds(diff).count()
                     << "us";
+        }else if(diff > nanoseconds(1)){
+            std::cout
+                    << nanoseconds(diff).count()
+                    << "ns";
         }
         std::cout << ']';
     }
