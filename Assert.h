@@ -18,7 +18,7 @@ namespace xtest{
     public:
         AssertFail(const char *case_name,const char *msg,const char *file_path,unsigned int line){
             std::stringstream ss;
-            ss << "Assert:"
+            ss << "[ASSERT]"
                << '\"'
                #if XTEST_OUTPUT_FULL_PATH
                << file_path
