@@ -6,5 +6,6 @@
 #include "Result.h"
 #include "Run.h"
 #include "Utility.h"
+#include "Info.h"
 
 #endif
