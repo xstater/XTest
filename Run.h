@@ -39,6 +39,7 @@ namespace xtest{
 #define RUN(...) \
 int main(int argc,char *argv[]){ \
     xtest::call(__VA_ARGS__); \
+    return 0; \
 }
 
 #endif //_XTEST_RUN_H_
