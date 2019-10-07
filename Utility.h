@@ -5,7 +5,7 @@
 #include <iostream>
 
 namespace xtest{
-    void print_time(const std::chrono::duration<double> &diff){
+    static void print_time(const std::chrono::duration<double> &diff){
         using hours = std::chrono::duration<double,std::ratio<3600>>;
         using minutes = std::chrono::duration<double,std::ratio<60>>;
         using seconds = std::chrono::duration<double,std::ratio<1>>;
