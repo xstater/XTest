@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <thread>
+#include <vector>
+#include <list>
 #include "Assert.h"
 #include "Case.h"
 #include "Run.h"
@@ -34,5 +36,11 @@ CASE_BEGIN(multi_thread_test)
     std::this_thread::sleep_for(std::chrono::milliseconds(20));
 CASE_END
 
+CASE_BEGIN(seq_test)
+    vector<int> v1 = {1,2,3,3};
+    list<int> l1 = {1,2,3};
+    ASSERT_SEQ(v1,l1);
+CASE_END
+
 //RUN(case1,REPEAT(case1,100))
-RUN(multi_thread_test)
+RUN(seq_test);
